@@ -29,14 +29,15 @@ function dibujarCirculos() {
   ];
 
   centros.forEach(c => {
-    fill(c.color);
     stroke(c.color);
-    ellipse(c.x, c.y, 180);
+    drawCircleMidpoint(c.x, c.y, 90);
+    fill(c.color);
+    noStroke();
     text(c.nombre, c.x, c.y + 110);
   });
 
   centros.forEach((c, idx) => {
-    stroke(0);
+    stroke(c.color);
     for (let i = 0; i < numPiezas; i++) {
       let angulo = TWO_PI / numPiezas * i;
       let x2 = c.x + 90 * cos(angulo);
@@ -47,6 +48,37 @@ function dibujarCirculos() {
       else if (idx === 2) lineaPuntoPendiente(c.x, c.y, x2, y2);
     }
   });
+}
+
+function drawCircleMidpoint(xc, yc, r) {
+  let x = 0;
+  let y = r;
+  let p = 5 / 4 - r;
+
+  plotCirclePoints(xc, yc, x, y);
+
+  while (x < y) {
+    x++;
+    if (p < 0) {
+      p = p + 2 * x + 1;
+    } else {
+      y--;
+      p = p + 2 * x + 1 - 2 * y;
+    }
+    plotCirclePoints(xc, yc, x, y);
+  }
+  strokeWeight(3);
+}
+
+function plotCirclePoints(xc, yc, x, y) {
+  point(xc + x, yc + y);
+  point(xc - x, yc + y);
+  point(xc + x, yc - y);
+  point(xc - x, yc - y);
+  point(xc + y, yc + x);
+  point(xc - y, yc + x);
+  point(xc + y, yc - x);
+  point(xc - y, yc - x);
 }
 
 function bresenham(x1, y1, x2, y2) {
